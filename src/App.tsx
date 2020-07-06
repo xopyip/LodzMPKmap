@@ -85,7 +85,7 @@ class App extends React.Component<AppProps, AppState> {
     clearInterval(this.interval);
     e.preventDefault();
     console.log(this.state.search);
-    let r = this.state.lines.filter(line => line.indexOf(this.state.search) > -1).join(",");
+    let r = this.state.lines.filter(line => line.toLowerCase().indexOf(this.state.search.toLowerCase()) > -1).join(",");
     if (r.length === 0) {
       this.props.alert.show("Podaj poprawny numer linii komunikacji miejskiej!");
       return;
