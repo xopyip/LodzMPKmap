@@ -1,4 +1,4 @@
-import React, {FormEvent} from 'react';
+import React from 'react';
 import axios from "axios";
 import {Map, Marker, TileLayer, Tooltip} from 'react-leaflet';
 import {AlertManager, withAlert} from 'react-alert'
@@ -86,7 +86,7 @@ class App extends React.Component<AppProps, AppState> {
     e.preventDefault();
     console.log(this.state.search);
     let r = this.state.lines.filter(line => line.indexOf(this.state.search) > -1).join(",");
-    if(r.length == 0){
+    if (r.length === 0) {
       this.props.alert.show("Podaj poprawny numer linii komunikacji miejskiej!");
       return;
     }
