@@ -23,11 +23,47 @@ class VehicleTrack extends Component<VehicleTrackProps, VehicleTrackState> {
       track: false,
       polyline: []
     };
+    this.update = this.update.bind(this);
   }
 
   componentDidMount() {
+    this.update();
+  }
+
+  componentDidUpdate(prevProps: Readonly<VehicleTrackProps>, prevState: Readonly<VehicleTrackState>, snapshot?: any) {
+    if (prevProps.vehicle !== this.props.vehicle) {
+      this.update();
+    }
+  }
+
+  render() {
+    return (
+      <Polyline color={"red"} positions={this.state.polyline}/>
+    );
+  }
+
+  private getTrackIndices(track: Track): number[] {
+    if (track) {
+      let item = track.directions.find(direction => (
+        (direction.to === this.props.vehicle.to && direction.from === this.props.vehicle.from) ||
+        (direction.to === this.props.vehicle.from && direction.from === this.props.vehicle.to)
+      ));
+      if (item) return item.indices.forward;
+      else {
+        console.log("no direction found", {
+          dir: track.directions,
+          vehicle: this.props.vehicle
+        });
+      }
+    }
+    return [];
+  }
+
+  private update() {
+    this.setState({polyline: []});
     let tracks = this.props.lines.filter(line => line.name === this.props.vehicle.name);
     if (tracks.length === 0) {
+      console.log("track not found");
       return;
     }
     let track = tracks[0].id;
@@ -54,20 +90,6 @@ class VehicleTrack extends Component<VehicleTrackProps, VehicleTrackState> {
       })
       this.setState({polyline: ret});
     });
-  }
-
-  render() {
-    return (
-      <Polyline color={"red"} positions={this.state.polyline}/>
-    );
-  }
-
-  private getTrackIndices(track: Track): number[] {
-    if (track) {
-      let item = track.directions.find(direction => direction.to === this.props.vehicle.to && direction.from === this.props.vehicle.from);
-      if (item) return item.indices.forward;
-    }
-    return [];
   }
 }
 

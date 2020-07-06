@@ -4,6 +4,15 @@ import Track from "./Track";
 
 const BASE_URL = "https://lodz.mateuszbaluch.tech/api/";
 
+function decodeString(s: string): string {
+  s = s.replace("&amp;", "&").replace(/&#([0-9]{1,3});/gi,
+    (match, numStr) => String.fromCharCode(parseInt(numStr, 10)));
+  if (s.indexOf("&amp;") > -1) {
+    return decodeString(s);
+  }
+  return s;
+}
+
 const API = {
   get: async function (endpoint: string) {
     return await axios.get(BASE_URL + endpoint).then(response => response.data);
@@ -39,8 +48,8 @@ const API = {
             name: vehicle[2].trim() || vehicle[19].trim(),
             timeToNextStation: vehicle[13],
             id: vehicle[0],
-            to: vehicle[25].trim(),
-            from: vehicle[26].trim()
+            to: decodeString(vehicle[25].trim()),
+            from: decodeString(vehicle[26].trim())
           });
         }
       }
