@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import App from './App';
+import App from './Components/App';
 import * as serviceWorker from './serviceWorker';
 
-import { transitions, positions, Provider as AlertProvider } from 'react-alert'
+import {positions, Provider as AlertProvider, transitions} from 'react-alert'
 import AlertTemplate from 'react-alert-template-basic'
 
 // optional configuration

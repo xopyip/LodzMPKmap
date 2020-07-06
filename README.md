@@ -13,8 +13,8 @@ Brak aplikacji w Apple Store umożliwiającej szybkie sprawdzenie lokalizacji au
 
 ## TODO:
 - Mapa:
-  - [ ] Wyswietlanie mapy
-  - [ ] Wyswietlanie trasy pojazdu
+  - [x] Wyswietlanie mapy
+  - [x] Wyswietlanie trasy pojazdu
   - [ ] Wyświetlanie znaczników przystanków
 - Pojazd:
   - [ ] Więcej informacji na temat danego pojazdu
