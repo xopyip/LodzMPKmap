@@ -52,7 +52,13 @@ class App extends React.Component<AppProps, AppState> {
   findVehicles(e: React.FormEvent) {
     clearInterval(this.interval);
     e.preventDefault();
-    let r = this.state.lines.filter(line => line.name.toLowerCase().indexOf(this.state.search.toLowerCase()) > -1).map(d => d.name).join(",");
+    let r = this.state.lines
+      .filter(line => line.name.toLowerCase().indexOf(this.state.search.toLowerCase()) > -1)
+      .filter(line => {
+        let exp = /[^0-9]*([0-9]+)[^0-9]*/;
+        return (exp.exec(line.name) ?? ["", NaN])[1] === (exp.exec(this.state.search) ?? ["", NaN])[1]; //NaN because NaN === NaN returns false
+      })
+      .map(d => d.name).join(",");
     if (r.length === 0) {
       this.props.alert.show("Podaj poprawny numer linii komunikacji miejskiej!");
       return;
