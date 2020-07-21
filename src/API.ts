@@ -41,10 +41,10 @@ const API = {
         if (match) {
           let vehicle = (JSON.parse(match[1]));
           vehicles.push({
-            lon1: vehicle[10],
-            lat1: vehicle[9],
-            lon2: vehicle[12],
-            lat2: vehicle[11],
+            lat1: vehicle[10],
+            lon1: vehicle[9],
+            lat2: vehicle[12],
+            lon2: vehicle[11],
             name: vehicle[2].trim() || vehicle[19].trim(),
             timeToNextStation: vehicle[13],
             id: vehicle[0],

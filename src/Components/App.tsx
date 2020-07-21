@@ -1,11 +1,13 @@
 import React from 'react';
-import {Map, Marker, TileLayer, Tooltip} from 'react-leaflet';
+import {MapContainer, TileLayer} from 'react-leaflet';
 import {AlertManager, withAlert} from 'react-alert'
 import API from "../API";
 
 import Vehicle from "../Vehicle";
 import Line from "../Line";
 import VehicleTrack from "./VehicleTrack";
+
+import {VehicleMarker} from "./VehicleMarker";
 
 type AppProps = {
   alert: AlertManager
@@ -14,7 +16,7 @@ type AppState = {
   search: string,
   lines: Line[],
   vehicles: Vehicle[],
-  selectedVehicle: Vehicle | false,
+  selectedVehicle: Vehicle | false
 };
 
 class App extends React.Component<AppProps, AppState> {
@@ -84,7 +86,7 @@ class App extends React.Component<AppProps, AppState> {
           </form>
 
         </div>
-        <Map center={[51.77, 19.46]} zoom={12} id={"map"}>
+        <MapContainer center={[51.77, 19.46]} zoom={12} id={"map"}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             tileSize={256}
@@ -92,17 +94,13 @@ class App extends React.Component<AppProps, AppState> {
             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
           {this.state.vehicles.map(vehicle => (
-
-            <Marker position={[vehicle.lon1, vehicle.lat1]} onClick={() => this.setState({selectedVehicle: vehicle})}
-                    key={vehicle.id}>
-              <Tooltip>
-                {vehicle.name}
-              </Tooltip>
-            </Marker>
+            <VehicleMarker vehicle={vehicle}
+                           setSelectedVehicle={selectedVehicle => this.setState({selectedVehicle})}
+                           key={vehicle.id}/>
 
           ))}
           {this.state.selectedVehicle && <VehicleTrack lines={this.state.lines} vehicle={this.state.selectedVehicle}/>}
-        </Map>
+        </MapContainer>
       </div>
     );
   }
