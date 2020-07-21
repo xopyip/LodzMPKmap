@@ -17,9 +17,9 @@ Brak aplikacji w Apple Store umożliwiającej szybkie sprawdzenie lokalizacji au
   - [x] Wyswietlanie trasy pojazdu
   - [ ] Wyświetlanie znaczników przystanków
 - Pojazd:
-  - [ ] Więcej informacji na temat danego pojazdu
-  - [ ] Znacznik kierunku pojazdu
-  - [ ] Wyswietlanie kolejnych przystanków na trasie
+  - [x] Więcej informacji na temat danego pojazdu
+  - [x] Znacznik kierunku pojazdu
+  - [x] Wyswietlanie kolejnych przystanków na trasie
 - Przystanki:
   - [ ] Rozkłady jazdy dla danego przystanku
 - Trasy:
