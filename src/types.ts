@@ -16,6 +16,7 @@ type Track = {
   roads: { id: number, from: number, to: number, points: [number, number][] }[]
   indices: { forward: number[], backward: number[] }[],
   directions: {
+    name: string,
     to: string,
     from: string,
     indices: { forward: number[], backward: number[] },

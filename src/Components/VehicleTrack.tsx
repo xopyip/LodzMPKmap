@@ -42,10 +42,10 @@ class VehicleTrack extends Component<VehicleTrackProps, VehicleTrackState> {
 
   private getTrackIndices(track: Track): number[] {
     if (track) {
-      let item = track.directions.find(direction => (
-        (direction.to === this.props.vehicle.to && direction.from === this.props.vehicle.from) ||
-        (direction.to === this.props.vehicle.from && direction.from === this.props.vehicle.to)
-      ));
+      let directionsToEnd = track.directions.filter(direction => direction.name === this.props.vehicle.to);
+      let directionsToStart = track.directions.filter(direction => direction.name === this.props.vehicle.from);
+      let item = directionsToEnd.find(dir1 => directionsToStart.find(dir2 => dir1.from === dir2.to && dir1.to === dir2.from) !== undefined);
+
       if (item) return item.indices.forward;
       else {
         console.log("no direction found", {

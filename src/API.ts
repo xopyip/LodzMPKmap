@@ -73,8 +73,9 @@ const API = {
         })),
         indices: data[2].map((d: any) => ({forward: d[0], backward: d[1]})),
         directions: data[3].map((d: any) => ({
-          to: d[3].trim(),
-          from: d[4].trim().replaceAll("-", " ").toUpperCase(),
+          name: d[3].trim(),
+          to: d[5].trim(),
+          from: d[4].trim(),
           indices: {
             forward: d[6][0],
             backward: d[6][1],
