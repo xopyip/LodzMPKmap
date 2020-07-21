@@ -47,12 +47,13 @@ export function VehicleMarker(props: VehicleMarkerProps) {
       <p>Do nastepnego przystanku: {props.vehicle.timeToNextStation}s</p>
       {timeTable && <p>Do końca: {timeTable.stops.length} przystanków</p>}
       <ol className={"vehicle-timetable"}>
-        {timeTable && timeTable.stops.map(stop => (
+        {timeTable && timeTable.stops.slice(0, 5).map(stop => (
           <li key={stop.stopID}>
             {stop.stopName} {stop.timeStr.replace("&lt;", "<")}
           </li>
         ))}
       </ol>
+      {timeTable && timeTable.stops.length > 5 && <p>...</p>}
     </Popup>
   </Marker>
 }
