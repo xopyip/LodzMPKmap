@@ -1,9 +1,7 @@
 import React, {Component} from "react";
-import Vehicle from "../Vehicle";
 import API from "../API";
 import {Polyline} from "react-leaflet";
-import Track from "../Track";
-import Line from "../Line";
+import {Line, Track, Vehicle} from "../types";
 
 type VehicleTrackProps = {
   vehicle: Vehicle,

@@ -1,6 +1,5 @@
 import axios from "axios";
-import Vehicle from "./Vehicle";
-import Track from "./Track";
+import {Track, Vehicle, VehicleStop, VehicleTimeTable} from "./types";
 
 const BASE_URL = "https://lodz.mateuszbaluch.tech/api/";
 
@@ -60,7 +59,12 @@ const API = {
   getTracks: async function (track: number): Promise<Track> {
     return API.get(`Home/GetTracks?routeId=${track}`).then(data => (
       {
-        stops: data[0],
+        stops: {
+          id: data[0][0],
+          name: data[0][1],
+          lon: data[0][3],
+          lat: data[0][4],
+        },
         roads: data[1].map((d: any) => ({
           id: d[0],
           from: d[1],
@@ -68,20 +72,41 @@ const API = {
           points: Array.from(Array(d[3].length / 2), (_, i) => ([d[3][i * 2 + 1], d[3][i * 2]]))
         })),
         indices: data[2].map((d: any) => ({forward: d[0], backward: d[1]})),
-        directions: data[3].map((d: any) => {
-          return ({
-            to: d[3].trim(),
-            from: d[4].trim().replaceAll("-", " ").toUpperCase(),
-            indices: {
-              forward: d[6][0],
-              backward: d[6][1],
-            },
-          });
-        }),
+        directions: data[3].map((d: any) => ({
+          to: d[3].trim(),
+          from: d[4].trim().replaceAll("-", " ").toUpperCase(),
+          indices: {
+            forward: d[6][0],
+            backward: d[6][1],
+          },
+        })),
 
       }
     ));
+  },
+
+  getVehicleTimeTable: async function (vehicle: number): Promise<VehicleTimeTable> {
+    return API.post(`Home/CNR_GetVehicleTimeTable`, {n: vehicle}).then((data: string) => {
+      let scheduleInfo = /<Schedules id="([0-9]+)" nr="([^"]+)" type="[0-9]+" o="([^"]+)" xmlns="">/.exec(data);
+      let stops: VehicleStop[] = data.split('\n')
+        .map(l => /<Stop lp="([0-9]+)" id="([0-9]+)" name="([^"]+)" th="" tm="([^"]+)" s="([0-9]+)" m="[0-9]+" \/>/.exec(l))
+        .filter(stop => stop !== null)
+        .map(stop => ({
+          lp: Number(stop![1]),
+          stopID: Number(stop![2]),
+          stopName: stop![3],
+          timeStr: stop![4],
+          time: Number(stop![5])
+        }));
+      return {
+        end: scheduleInfo![3],
+        line: scheduleInfo![2],
+        stops
+      };
+    });
   }
+
 };
 
 export default API;
+export {decodeString};

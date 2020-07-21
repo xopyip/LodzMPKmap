@@ -3,11 +3,10 @@ import {MapContainer, TileLayer} from 'react-leaflet';
 import {AlertManager, withAlert} from 'react-alert'
 import API from "../API";
 
-import Vehicle from "../Vehicle";
-import Line from "../Line";
 import VehicleTrack from "./VehicleTrack";
 
 import {VehicleMarker} from "./VehicleMarker";
+import {Line, Vehicle} from "../types";
 
 type AppProps = {
   alert: AlertManager
@@ -96,6 +95,7 @@ class App extends React.Component<AppProps, AppState> {
           {this.state.vehicles.map(vehicle => (
             <VehicleMarker vehicle={vehicle}
                            setSelectedVehicle={selectedVehicle => this.setState({selectedVehicle})}
+                           isSelected={this.state.selectedVehicle && vehicle.id === this.state.selectedVehicle.id}
                            key={vehicle.id}/>
 
           ))}
