@@ -31,7 +31,6 @@ export function VehicleMarker(props: VehicleMarkerProps) {
   });
   let [timeTable, setTimeTable] = useState<false | VehicleTimeTable>(false);
   useEffect(() => {
-    console.log("effect " + props.vehicle.id + " selected " + props.isSelected);
     if (props.isSelected)
       API.getVehicleTimeTable(props.vehicle.id).then(r => setTimeTable(r));
   }, [props.vehicle.id, props.vehicle.lon1, props.vehicle.lat1, props.isSelected]);
