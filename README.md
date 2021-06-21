@@ -4,6 +4,9 @@
 
 Brak aplikacji w Apple Store umożliwiającej szybkie sprawdzenie lokalizacji autobusu danej linii. 
 
+## Screenshoot:
+![Zrzut ekranu aplikacji](https://i.imgur.com/MtDAlkW.png)
+
 ## Stack
 - React - baza aplikacji
 - Leaflet - biblioteka odpowiedzialna za wyświetlanie mapy
