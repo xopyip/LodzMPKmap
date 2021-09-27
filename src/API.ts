@@ -1,7 +1,7 @@
 import axios from "axios";
 import {Track, Vehicle, VehicleStop, VehicleTimeTable} from "./types";
 
-const BASE_URL = "https://lodz.mateuszbaluch.tech/api/";
+const BASE_URL = "https://lodzmpk.pl/api/";
 
 function decodeString(s: string): string {
   s = s.replace("&amp;", "&").replace(/&#([0-9]{1,3});/gi,
