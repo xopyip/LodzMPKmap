@@ -1,6 +1,6 @@
 import React from 'react';
 import {MapContainer, TileLayer} from 'react-leaflet';
-import {AlertManager, withAlert} from 'react-alert'
+import {AlertContainer, withAlert} from 'react-alert'
 import API from "../API";
 
 import VehicleTrack from "./VehicleTrack";
@@ -9,7 +9,7 @@ import {VehicleMarker} from "./VehicleMarker";
 import {Line, Vehicle} from "../types";
 
 type AppProps = {
-  alert: AlertManager
+  alert: AlertContainer
 };
 type AppState = {
   search: string,
