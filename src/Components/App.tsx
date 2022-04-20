@@ -6,13 +6,16 @@ import API from "../API";
 import VehicleTrack from "./VehicleTrack";
 
 import {VehicleMarker} from "./VehicleMarker";
-import {Line, Vehicle} from "../types";
+import {BusStop, Line, Vehicle} from "../types";
+import {BusStopMarker} from "./BusStopMarker";
+import {ZoomFilter} from "./ZoomFilter";
 
 function App() {
     const [search, setSearch] = useState("");
     const [lines, setLines] = useState<Line[]>([]);
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
     const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | false>(false);
+    const [busStops, setBusStops] = useState<BusStop[]>([]);
 
     const alert = useAlert();
 
@@ -55,9 +58,11 @@ function App() {
     }, [loadVehicles, currentVehicles])
 
     useEffect(() => {
+        //todo: dont change state if App is unmounted
         API.getRouteList().then(lines => {
             setLines(lines);
-        })
+        });
+        API.getBusStopList().then(setBusStops)
     }, []);
 
     return (
@@ -87,6 +92,14 @@ function App() {
                                    key={vehicle.id}/>
 
                 ))}
+                <ZoomFilter minZoom={14} maxZoom={200}>
+                    {busStops
+                        .map(busStop => (
+                            <BusStopMarker busStop={busStop}
+                                           key={busStop.id}/>
+
+                        ))}
+                </ZoomFilter>
                 {selectedVehicle && <VehicleTrack lines={lines} vehicle={selectedVehicle}/>}
             </MapContainer>
         </div>

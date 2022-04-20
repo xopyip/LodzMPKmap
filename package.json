@@ -13,7 +13,7 @@
     "@types/react-dom": "^18.0.1",
     "@types/react-leaflet": "^2.8.2",
     "axios": "^0.26.1",
-    "leaflet": "^1.7.1",
+    "leaflet": "^1.8.0",
     "node-sass": "^7.0.1",
     "react": "^18.0.0",
     "react-alert": "^7.0.3",

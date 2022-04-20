@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Track, Vehicle, VehicleStop, VehicleTimeTable} from "./types";
+import {BusStop, BusStopAPIData, Track, Vehicle, VehicleStop, VehicleTimeTable} from "./types";
 
 const BASE_URL = "https://lodzmpk.pl/api/";
 
@@ -84,6 +84,17 @@ const API = {
 
       }
     ));
+  },
+
+  getBusStopList: async function(): Promise<BusStop[]>{
+    return API.post('Home/GetMapBusStopList', {}).then((data: BusStopAPIData[]) => {
+      return data.map(data => {
+        const [id, name, _, region, lon, lat, __, lines] = data;
+        return {
+          id, name, region, lon, lat
+        }
+      });
+    });
   },
 
   getVehicleTimeTable: async function (vehicle: number): Promise<VehicleTimeTable> {
