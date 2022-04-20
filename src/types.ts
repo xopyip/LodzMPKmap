@@ -48,3 +48,10 @@ export type BusStop = {
     lon: number,
     lat: number,
 };
+export type BusStopTimeTable = {
+    departures: {
+        line: string,
+        time: string,
+        name: string,
+    }[]
+}
