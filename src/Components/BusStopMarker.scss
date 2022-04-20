@@ -1,0 +1,11 @@
+:root {
+  --bus-stop-color: blue;
+}
+
+.bus-stop-marker {
+  background: var(--bus-stop-color);
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #00000080;
+}

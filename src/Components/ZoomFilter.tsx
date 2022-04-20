@@ -1,5 +1,5 @@
 import {useMap, useMapEvents} from "react-leaflet";
-import React, {ReactNode, useCallback, useEffect, useState, PropsWithChildren} from "react";
+import React, {useCallback, useEffect, useState, PropsWithChildren} from "react";
 
 
 type ZoomFilterProps = {
