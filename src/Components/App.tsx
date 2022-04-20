@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {MapContainer, TileLayer} from 'react-leaflet';
-import {AlertContainer, withAlert} from 'react-alert'
+import {useAlert, withAlert} from 'react-alert'
 import API from "../API";
 
 import VehicleTrack from "./VehicleTrack";
@@ -8,102 +8,89 @@ import VehicleTrack from "./VehicleTrack";
 import {VehicleMarker} from "./VehicleMarker";
 import {Line, Vehicle} from "../types";
 
-type AppProps = {
-  alert: AlertContainer
-};
-type AppState = {
-  search: string,
-  lines: Line[],
-  vehicles: Vehicle[],
-  selectedVehicle: Vehicle | false
-};
+function App() {
+    const [search, setSearch] = useState("");
+    const [lines, setLines] = useState<Line[]>([]);
+    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+    const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | false>(false);
 
-class App extends React.Component<AppProps, AppState> {
-  // @ts-ignore
-  private interval: NodeJS.Timeout;
+    const alert = useAlert();
 
-  constructor(props: AppProps) {
-    super(props);
-    this.state = {
-      search: "",
-      lines: [],
-      vehicles: [],
-      selectedVehicle: false
-    }
-    this.findVehicles = this.findVehicles.bind(this);
-  }
+    const [currentVehicles, setCurrentVehicles] = useState("");
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+    const loadVehicles = useCallback((r: string) => {
+        API.getVehicles(r)
+            .then((vehicles: Vehicle[]) => {
+                setVehicles(vehicles);
+            })
+    }, [setVehicles])
 
-  componentDidMount() {
-    API.getRouteList().then(lines => {
-      this.setState({lines});
-    })
-  }
+    const findVehicles = useCallback((e: React.FormEvent) => {
+        setCurrentVehicles("");
+        e.preventDefault();
+        let r = lines.filter(line => line.name.toLowerCase().indexOf(search.toLowerCase()) > -1)
+            .filter(line => {
+                let exp = /[^0-9]*([0-9]+)[^0-9]*/;
+                return (exp.exec(line.name) ?? ["", NaN])[1] === (exp.exec(search) ?? ["", NaN])[1]; //NaN because NaN === NaN returns false
+            })
+            .map(d => d.name).join(",");
+        if (r.length === 0) {
+            alert.show("Podaj poprawny numer linii komunikacji miejskiej!");
+            return;
+        }
+        setCurrentVehicles(r);
+        return false;
+    }, [lines, search, alert, setCurrentVehicles])
 
-  loadVehicles(r: string) {
-    API.getVehicles(r)
-      .then((vehicles: Vehicle[]) => {
-        this.setState({vehicles});
-      })
-  }
+    useEffect(() => {
+        if (currentVehicles.length > 0) {
+            const id = setInterval(() => {
+                loadVehicles(currentVehicles);
+            }, 1000);
+            return () => clearInterval(id);
+        } else {
+            return () => {
+            };
+        }
+    }, [loadVehicles, currentVehicles])
 
-  findVehicles(e: React.FormEvent) {
-    clearInterval(this.interval);
-    e.preventDefault();
-    let r = this.state.lines
-      .filter(line => line.name.toLowerCase().indexOf(this.state.search.toLowerCase()) > -1)
-      .filter(line => {
-        let exp = /[^0-9]*([0-9]+)[^0-9]*/;
-        return (exp.exec(line.name) ?? ["", NaN])[1] === (exp.exec(this.state.search) ?? ["", NaN])[1]; //NaN because NaN === NaN returns false
-      })
-      .map(d => d.name).join(",");
-    if (r.length === 0) {
-      this.props.alert.show("Podaj poprawny numer linii komunikacji miejskiej!");
-      return;
-    }
-    this.interval = setInterval(() => this.loadVehicles(r), 10000);
-    this.loadVehicles(r);
-    return false;
-  }
-
-
-  render() {
+    useEffect(() => {
+        API.getRouteList().then(lines => {
+            setLines(lines);
+        })
+    }, []);
 
     return (
-      <div className="App">
-        <div id="navigation">
-          <form onSubmit={this.findVehicles}>
-            <div className="input-container">
-              <input type="text" required={true} value={this.state.search}
-                     onChange={(e) => this.setState({search: e.target.value})}/>
-              <label>Linia MPK (np. 58B)</label>
+        <div className="App">
+            <div id="navigation">
+                <form onSubmit={findVehicles}>
+                    <div className="input-container">
+                        <input type="text" required={true} value={search}
+                               onChange={(e) => setSearch(e.target.value)}/>
+                        <label>Linia MPK (np. 58B)</label>
+                    </div>
+                    <button type="submit" className="btn">Wyszukaj!</button>
+                </form>
+
             </div>
-            <button type="submit" className="btn">Wyszukaj!</button>
-          </form>
+            <MapContainer center={[51.77, 19.46]} zoom={12} id={"map"}>
+                <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    tileSize={256}
+                    zIndex={-1}
+                    attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                />
+                {vehicles.map(vehicle => (
+                    <VehicleMarker vehicle={vehicle}
+                                   setSelectedVehicle={setSelectedVehicle}
+                                   isSelected={selectedVehicle && vehicle.id === selectedVehicle.id}
+                                   key={vehicle.id}/>
 
+                ))}
+                {selectedVehicle && <VehicleTrack lines={lines} vehicle={selectedVehicle}/>}
+            </MapContainer>
         </div>
-        <MapContainer center={[51.77, 19.46]} zoom={12} id={"map"}>
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            tileSize={256}
-            zIndex={-1}
-            attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-          />
-          {this.state.vehicles.map(vehicle => (
-            <VehicleMarker vehicle={vehicle}
-                           setSelectedVehicle={selectedVehicle => this.setState({selectedVehicle})}
-                           isSelected={this.state.selectedVehicle && vehicle.id === this.state.selectedVehicle.id}
-                           key={vehicle.id}/>
-
-          ))}
-          {this.state.selectedVehicle && <VehicleTrack lines={this.state.lines} vehicle={this.state.selectedVehicle}/>}
-        </MapContainer>
-      </div>
     );
-  }
 }
 
 export default withAlert()(App);
