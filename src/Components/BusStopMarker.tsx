@@ -27,7 +27,7 @@ export function BusStopMarker({busStop}: BusStopMarkerProps) {
     });
 
     useMapEvents({
-        move: () => {
+        moveend: () => {
             setVisible(map.getBounds().contains([busStop.lat, busStop.lon]))
         }
     })

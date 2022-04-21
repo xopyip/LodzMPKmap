@@ -16,7 +16,7 @@ export function ZoomFilter({minZoom, maxZoom, children}: PropsWithChildren<ZoomF
 
 
     useMapEvents({
-        zoom: updateVisibility
+        zoomend: updateVisibility
     });
 
     useEffect(() => {
