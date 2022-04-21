@@ -1,12 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.scss';
-import './navigation.scss';
-import App from './Components/App';
-import * as serviceWorker from './serviceWorker';
-
-import {positions, Provider as AlertProvider, transitions} from 'react-alert'
-import AlertTemplate from 'react-alert-template-basic'
+import React from "react";
+import { createRoot } from "react-dom/client";
+import "./index.scss";
+import "./navigation.scss";
+import { positions, Provider as AlertProvider, transitions } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+import App from "./Components/App";
+import * as serviceWorker from "./serviceWorker";
 
 // optional configuration
 const options = {
@@ -14,16 +13,16 @@ const options = {
   position: positions.MIDDLE,
   timeout: 5000,
   // you can also just use 'scale'
-  transition: transitions.SCALE
-}
+  transition: transitions.SCALE,
+};
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root")!);
+root.render(
   <React.StrictMode>
     <AlertProvider template={AlertTemplate} {...options}>
       <App />
     </AlertProvider>
   </React.StrictMode>,
-  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
