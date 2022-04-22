@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import { useAlert, withAlert } from "react-alert";
+import { TileLayer as LeafletTileLayer } from "leaflet";
 import API from "../API";
 
 import VehicleTrack from "./VehicleTrack";
@@ -17,7 +18,25 @@ function App() {
     false,
   );
 
+  const [isTopographic, setIsTopographic] = useState(true);
+
   const alert = useAlert();
+  const tileLayerRef = useRef<LeafletTileLayer>(null);
+  const topographicURL =
+    "https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png";
+  const topographicAttribution =
+    '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+  const nonTopographicURL =
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+  const nonTopographicAttribution =
+    "Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012";
+  useEffect(() => {
+    if (tileLayerRef.current) {
+      tileLayerRef.current.setUrl(
+        isTopographic ? topographicURL : nonTopographicURL,
+      );
+    }
+  }, [isTopographic]);
 
   const [currentVehicles, setCurrentVehicles] = useState("");
 
@@ -95,10 +114,11 @@ function App() {
       </div>
       <MapContainer center={[51.77, 19.46]} zoom={12} id="map">
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url={isTopographic ? topographicURL : nonTopographicURL}
           tileSize={256}
           zIndex={-1}
-          attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+          ref={tileLayerRef}
+          attribution={`${topographicAttribution} / and / ${nonTopographicAttribution}`}
         />
         {vehicles.map(vehicle => (
           <VehicleMarker
@@ -113,6 +133,13 @@ function App() {
           <VehicleTrack lines={lines} vehicle={selectedVehicle} />
         )}
       </MapContainer>
+      <button
+        aria-label="Tryb wyświetlania mapy"
+        id="change-map-style"
+        onClick={() => setIsTopographic(!isTopographic)}
+        value="Tryb wyświetlania mapy"
+        type="button"
+      />
     </div>
   );
 }

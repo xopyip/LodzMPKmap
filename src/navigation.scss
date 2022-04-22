@@ -80,3 +80,23 @@
 #navigation form .input-container {
   flex-grow: 1;
 }
+
+:root{
+  --is-non-topographic: 1;
+}
+
+#change-map-style{
+  position: absolute;
+  border: 2px solid #fff;
+  bottom: 20px;
+  right: 20px;
+  width: 64px;
+  height: 64px;
+  background: url("./topographic_toggle.png") calc(var(--is-non-topographic) * 64px) 0;
+  background-size: 128px 64px;
+  transition: background-position 100ms linear;
+  border-radius: 25%;
+  cursor: pointer;
+  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+
+}
