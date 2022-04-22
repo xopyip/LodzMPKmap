@@ -1,4 +1,4 @@
-import { Marker, Tooltip } from "react-leaflet";
+import { Marker, Tooltip, useMap } from "react-leaflet";
 import React, { useMemo } from "react";
 import { DivIcon } from "leaflet";
 import "./ClusterMarker.scss";
@@ -18,9 +18,16 @@ export function ClusterMarker({ count, lat, lon }: ClusterMarkerProps) {
       }),
     [count],
   );
+  const map = useMap();
 
   return (
-    <Marker icon={icon} position={[lat, lon]}>
+    <Marker
+      icon={icon}
+      position={[lat, lon]}
+      eventHandlers={{
+        click: () => map.setZoomAround([lat, lon], map.getZoom() + 1),
+      }}
+    >
       <Tooltip>Ilość przystanków: {count}</Tooltip>
     </Marker>
   );
