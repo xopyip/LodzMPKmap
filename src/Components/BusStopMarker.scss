@@ -9,3 +9,34 @@
   height: 10px;
   border: 1px solid #00000080;
 }
+.bus-stop-popup{
+  .spinner{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 15px;
+    height: 15px;
+  }
+  .bus-stop-timetable{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li{
+      display: flex;
+      padding: 4px;
+      align-items: center;
+      & span:nth-of-type(1){
+        margin-right: 10px;
+      }
+      & span:nth-of-type(2){
+        flex: 1;
+        margin-right: 10px;
+        text-align: center;
+      }
+      &:nth-of-type(2n){
+        background: rgba(0,0,0,0.1);
+      }
+    }
+  }
+}
+

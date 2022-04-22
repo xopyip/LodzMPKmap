@@ -63,13 +63,14 @@ export function BusStopMarker({ busStop }: BusStopMarkerProps) {
       <Tooltip>{busStop.name}</Tooltip>
       <Popup className="bus-stop-popup">
         <p>Przystanek: {busStop.name}</p>
-        {busStopTimeTable == null || (loading && <div>Wczytywanie...</div>)}
+        {busStopTimeTable == null || (loading && <div className="spinner" />)}
         {busStopTimeTable != null && (
-          <ul>
+          <ul className="bus-stop-timetable">
             {busStopTimeTable.departures.map(departure => (
               <li key={departure.line + departure.time}>
-                {departure.line}. {departure.name} -{" "}
-                {API.decodeString(departure.time)}
+                <span>{departure.line}</span>
+                <span>{departure.name}</span>
+                <span>{API.decodeString(departure.time)}</span>
               </li>
             ))}
           </ul>
