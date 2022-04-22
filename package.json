@@ -15,7 +15,9 @@
     "react-alert-template-basic": "^1.0.2",
     "react-dom": "^18.0.0",
     "react-leaflet": "^4.0.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "supercluster": "^7.1.5",
+    "use-supercluster": "^0.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

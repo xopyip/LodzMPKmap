@@ -1,4 +1,4 @@
-import { Marker, Popup, Tooltip, useMap, useMapEvents } from "react-leaflet";
+import { Marker, Popup, Tooltip } from "react-leaflet";
 import React, { useState } from "react";
 import { DivIcon } from "leaflet";
 import { BusStop, BusStopTimeTable } from "../types";
@@ -16,24 +16,17 @@ const regionColors: { [idx: number]: string } = {
 };
 
 export function BusStopMarker({ busStop }: BusStopMarkerProps) {
-  const map = useMap();
-  const [isVisible, setVisible] = useState(false);
   const [busStopTimeTable, setBusStopTimeTable] =
     useState<BusStopTimeTable | null>(null);
 
   const icon = new DivIcon({
-    iconSize: [20, 20],
+    iconSize: [10, 10],
     html: `<div class="bus-stop-marker" style="--bus-stop-color: ${
       regionColors[busStop.region] ?? "blue"
     }"></div>`,
   });
 
-  useMapEvents({
-    moveend: () => {
-      setVisible(map.getBounds().contains([busStop.lat, busStop.lon]));
-    },
-  });
-  return !isVisible ? null : (
+  return (
     <Marker
       icon={icon}
       eventHandlers={{
@@ -52,7 +45,7 @@ export function BusStopMarker({ busStop }: BusStopMarkerProps) {
         ) : (
           <ul>
             {busStopTimeTable.departures.map(departure => (
-              <li>
+              <li key={departure.line + departure.time}>
                 {departure.line}. {departure.name} -{" "}
                 {API.decodeString(departure.time)}
               </li>

@@ -6,9 +6,8 @@ import API from "../API";
 import VehicleTrack from "./VehicleTrack";
 
 import { VehicleMarker } from "./VehicleMarker";
-import { BusStop, Line, Vehicle } from "../types";
-import { BusStopMarker } from "./BusStopMarker";
-import { ZoomFilter } from "./ZoomFilter";
+import { Line, Vehicle } from "../types";
+import { BusStopLayer } from "./BusStopsLayer";
 
 function App() {
   const [search, setSearch] = useState("");
@@ -17,7 +16,6 @@ function App() {
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | false>(
     false,
   );
-  const [busStops, setBusStops] = useState<BusStop[]>([]);
 
   const alert = useAlert();
 
@@ -74,7 +72,6 @@ function App() {
     API.getRouteList().then(lines => {
       setLines(lines);
     });
-    API.getBusStopList().then(setBusStops);
   }, []);
 
   return (
@@ -101,7 +98,7 @@ function App() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           tileSize={256}
           zIndex={-1}
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         {vehicles.map(vehicle => (
           <VehicleMarker
@@ -111,11 +108,7 @@ function App() {
             key={vehicle.id}
           />
         ))}
-        <ZoomFilter minZoom={14} maxZoom={200}>
-          {busStops.map(busStop => (
-            <BusStopMarker busStop={busStop} key={busStop.id} />
-          ))}
-        </ZoomFilter>
+        <BusStopLayer />
         {selectedVehicle && (
           <VehicleTrack lines={lines} vehicle={selectedVehicle} />
         )}
