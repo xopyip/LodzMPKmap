@@ -40,7 +40,6 @@
       }
     ],
     "import/extensions": "off",
-    "react-hooks/exhaustive-deps": "off",
     "react/jsx-props-no-spreading": "off",
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],

@@ -1,5 +1,5 @@
 import { Marker, Popup, Tooltip } from "react-leaflet";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DivIcon } from "leaflet";
 import { BusStop, BusStopTimeTable } from "../types";
 import "./BusStopMarker.scss";
@@ -18,7 +18,10 @@ const regionColors: { [idx: number]: string } = {
 export function BusStopMarker({ busStop }: BusStopMarkerProps) {
   const [busStopTimeTable, setBusStopTimeTable] =
     useState<BusStopTimeTable | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
+  const [updateTimeTableInterval, setUpdateTimeTableInterval] =
+    useState<NodeJS.Timer | null>(null);
   const icon = new DivIcon({
     iconSize: [10, 10],
     html: `<div class="bus-stop-marker" style="--bus-stop-color: ${
@@ -26,23 +29,42 @@ export function BusStopMarker({ busStop }: BusStopMarkerProps) {
     }"></div>`,
   });
 
+  const updateTimeTable = useCallback(() => {
+    setLoading(true);
+    API.getBusStopDepartures(busStop.id).then(data => {
+      setBusStopTimeTable(data);
+      setLoading(false);
+    });
+  }, [setBusStopTimeTable, setLoading, busStop]);
+
+  const stopUpdates = useCallback(() => {
+    if (updateTimeTableInterval) {
+      clearInterval(updateTimeTableInterval);
+    }
+  }, [updateTimeTableInterval]);
+
+  useEffect(() => {
+    return () => stopUpdates();
+  }, [stopUpdates]);
+
   return (
     <Marker
       icon={icon}
       eventHandlers={{
         popupopen: () => {
           setBusStopTimeTable(null);
-          API.getBusStopDepartures(busStop.id).then(setBusStopTimeTable);
+          updateTimeTable();
+          setUpdateTimeTableInterval(setInterval(updateTimeTable, 10000));
         },
+        popupclose: stopUpdates,
       }}
       position={[busStop.lat, busStop.lon]}
     >
       <Tooltip>{busStop.name}</Tooltip>
       <Popup className="bus-stop-popup">
         <p>Przystanek: {busStop.name}</p>
-        {busStopTimeTable == null ? (
-          <div>Wczytywanie...</div>
-        ) : (
+        {busStopTimeTable == null || (loading && <div>Wczytywanie...</div>)}
+        {busStopTimeTable != null && (
           <ul>
             {busStopTimeTable.departures.map(departure => (
               <li key={departure.line + departure.time}>
