@@ -139,6 +139,7 @@ function App() {
         onClick={() => setIsTopographic(!isTopographic)}
         value="Tryb wyświetlania mapy"
         type="button"
+        className={isTopographic ? "" : "non-topographic"}
       />
     </div>
   );
