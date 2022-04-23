@@ -1,6 +1,10 @@
 import { TileLayer } from "react-leaflet";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { TileLayer as LeafletTileLayer } from "leaflet";
+
+type MapTileLayerProps = {
+  isTopographic: boolean;
+};
 
 const topographicURL = "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
 const topographicAttribution =
@@ -10,8 +14,7 @@ const nonTopographicURL =
 const nonTopographicAttribution =
   "Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012";
 
-export function MapTileLayer() {
-  const [isTopographic, setIsTopographic] = useState(true);
+export function MapTileLayer({ isTopographic }: MapTileLayerProps) {
   const tileLayerRef = useRef<LeafletTileLayer | null>(null);
   useEffect(() => {
     if (tileLayerRef.current) {
@@ -22,22 +25,12 @@ export function MapTileLayer() {
   }, [isTopographic]);
 
   return (
-    <>
-      <TileLayer
-        url={isTopographic ? topographicURL : nonTopographicURL}
-        tileSize={256}
-        zIndex={-1}
-        ref={tileLayerRef}
-        attribution={`${topographicAttribution} / and / ${nonTopographicAttribution}`}
-      />
-      <button
-        aria-label="Tryb wyświetlania mapy"
-        id="change-map-style"
-        onClick={() => setIsTopographic(!isTopographic)}
-        value="Tryb wyświetlania mapy"
-        type="button"
-        className={isTopographic ? "" : "non-topographic"}
-      />
-    </>
+    <TileLayer
+      url={isTopographic ? topographicURL : nonTopographicURL}
+      tileSize={256}
+      zIndex={-1}
+      ref={tileLayerRef}
+      attribution={`${topographicAttribution} / and / ${nonTopographicAttribution}`}
+    />
   );
 }

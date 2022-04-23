@@ -13,6 +13,7 @@ import Navigation from "./navigation";
 function App() {
   const [lines, setLines] = useState<Line[]>([]);
   const [currentVehicles, setCurrentVehicles] = useState("");
+  const [isTopographic, setIsTopographic] = useState(true);
 
   useEffect(() => {
     let mounted = true;
@@ -28,9 +29,14 @@ function App() {
 
   return (
     <div className="App">
-      <Navigation lines={lines} setCurrentVehicles={setCurrentVehicles} />
+      <Navigation
+        lines={lines}
+        setCurrentVehicles={setCurrentVehicles}
+        isTopographic={isTopographic}
+        setIsTopographic={setIsTopographic}
+      />
       <MapContainer center={[51.77, 19.46]} zoom={12} id="map">
-        <MapTileLayer />
+        <MapTileLayer isTopographic={isTopographic} />
         <VehiclesLayer currentVehicles={currentVehicles} lines={lines} />
         <BusStopLayer />
         <GPSMarker />

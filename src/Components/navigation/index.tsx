@@ -6,11 +6,15 @@ import "./style.scss";
 type NavigationProps = {
   setCurrentVehicles: (result: string) => void;
   lines: Line[];
+  isTopographic: boolean;
+  setIsTopographic: (val: boolean) => void;
 };
 
 export default function Navigation({
   setCurrentVehicles,
   lines,
+  isTopographic,
+  setIsTopographic,
 }: NavigationProps) {
   const [search, setSearch] = useState("");
   const alert = useAlert();
@@ -41,22 +45,32 @@ export default function Navigation({
     [lines, search, alert, setCurrentVehicles],
   );
   return (
-    <div id="navigation">
-      <form onSubmit={findVehicles}>
-        <div className="input-container">
-          <input
-            type="text"
-            required
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            id="search-input"
-          />
-          <label htmlFor="search-input">Linia MPK (np. 58B)</label>
-        </div>
-        <button type="submit" className="btn">
-          Wyszukaj!
-        </button>
-      </form>
-    </div>
+    <>
+      <div id="navigation">
+        <form onSubmit={findVehicles}>
+          <div className="input-container">
+            <input
+              type="text"
+              required
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              id="search-input"
+            />
+            <label htmlFor="search-input">Linia MPK (np. 58B)</label>
+          </div>
+          <button type="submit" className="btn">
+            Wyszukaj!
+          </button>
+        </form>
+      </div>
+      <button
+        aria-label="Tryb wyświetlania mapy"
+        id="change-map-style"
+        onClick={() => setIsTopographic(!isTopographic)}
+        value="Tryb wyświetlania mapy"
+        type="button"
+        className={isTopographic ? "" : "non-topographic"}
+      />
+    </>
   );
 }
