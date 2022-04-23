@@ -15,11 +15,13 @@ export default function GPSMarker() {
       setCurrentPosition([position.coords.latitude, position.coords.longitude]);
       if (firstUpdate) {
         setTimeout(() => {
-          map.setZoomAround(
-            [position.coords.latitude, position.coords.longitude],
-            20,
-            { animate: true },
-          );
+          map
+            .setZoomAround(
+              [position.coords.latitude, position.coords.longitude],
+              20,
+              { animate: true },
+            )
+            .setZoom(15);
         }, 1000);
         setFirstUpdate(false);
       }
