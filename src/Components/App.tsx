@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { useAlert, withAlert } from "react-alert";
-import { TileLayer as LeafletTileLayer } from "leaflet";
+import { DivIcon, TileLayer as LeafletTileLayer } from "leaflet";
 import API from "../API";
 
 import VehicleTrack from "./VehicleTrack";
@@ -25,7 +25,7 @@ function App() {
   const topographicURL =
     "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
   const topographicAttribution =
-    "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors, Tiles style by <a href=\"https://www.hotosm.org/\" target=\"_blank\">Humanitarian OpenStreetMap Team</a> hosted by <a href=\"https://openstreetmap.fr/\" target=\"_blank\">OpenStreetMap France</a>";
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>';
   const nonTopographicURL =
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
   const nonTopographicAttribution =
@@ -48,6 +48,36 @@ function App() {
     },
     [setVehicles],
   );
+
+  const [currentPosition, setCurrentPosition] = useState<
+    [number, number] | null
+  >(null);
+
+  const updateCurrentPosition = useCallback(() => {
+    navigator.geolocation.getCurrentPosition(position => {
+      setCurrentPosition([position.coords.latitude, position.coords.longitude]);
+    });
+  }, []);
+
+  useEffect(() => {
+    let interval: NodeJS.Timer | null = null;
+    updateCurrentPosition();
+    if ("geolocation" in navigator) {
+      interval = setInterval(() => {
+        updateCurrentPosition();
+      }, 10000);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [updateCurrentPosition]);
+
+  const currentPosIcon = new DivIcon({
+    iconSize: [35, 35],
+    html: `<div class="current-pos-marker"></div>`,
+  });
 
   const findVehicles = useCallback(
     (e: React.FormEvent) => {
@@ -131,6 +161,9 @@ function App() {
         <BusStopLayer />
         {selectedVehicle && (
           <VehicleTrack lines={lines} vehicle={selectedVehicle} />
+        )}
+        {currentPosition != null && (
+          <Marker icon={currentPosIcon} position={currentPosition} />
         )}
       </MapContainer>
       <button

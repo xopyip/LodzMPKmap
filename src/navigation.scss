@@ -96,7 +96,7 @@
   transition: background-position 100ms linear;
   border-radius: 25%;
   cursor: pointer;
-  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  box-shadow: rgba(255, 255, 255, 0.1) 0 1px 1px 0 inset, rgba(50, 50, 93, 0.25) 0 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
 @media screen and (max-width: 800px) {
   #change-map-style{
@@ -106,4 +106,26 @@
 }
 .non-topographic{
   --is-non-topographic: 1;
+}
+
+.current-pos-marker{
+  background: #0055ff;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  border: 3px solid #ffffff;
+  box-sizing: border-box;
+  animation: current-pos-anim 1s ease infinite;
+}
+@keyframes current-pos-anim {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 lighten(#0055ff, 30);
+    -moz-box-shadow: 0 0 0 0 lighten(#0055ff, 30);
+    box-shadow: 0 0 0 0 lighten(#0055ff, 30);
+  }
+  100%{
+    -webkit-box-shadow: 0 0 0 10px lighten(#0055ff, 30);
+    -moz-box-shadow: 0 0 0 10px lighten(#0055ff, 30);
+    box-shadow: 0 0 0 10px lighten(#0055ff, 30);
+  }
 }
