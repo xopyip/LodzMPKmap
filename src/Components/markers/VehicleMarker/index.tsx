@@ -1,9 +1,9 @@
 import { DivIcon } from "leaflet";
 import { Marker, Popup, Tooltip } from "react-leaflet";
 import React, { useEffect, useState } from "react";
-import "./VehicleMarker.scss";
-import { Vehicle, VehicleTimeTable } from "../types";
-import API from "../API";
+import "./style.scss";
+import { Vehicle, VehicleTimeTable } from "../../../types";
+import API from "../../../API";
 
 /**
  * Convert previous and current vehicle position into direction angle
@@ -27,7 +27,7 @@ type VehicleMarkerProps = {
   isSelected: boolean;
 };
 
-export function VehicleMarker({
+export default function VehicleMarker({
   vehicle,
   isSelected,
   setSelectedVehicle,

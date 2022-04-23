@@ -1,9 +1,9 @@
 import { Marker, Popup, Tooltip } from "react-leaflet";
 import React, { useCallback, useEffect, useState } from "react";
 import { DivIcon } from "leaflet";
-import { BusStop, BusStopTimeTable } from "../types";
-import "./BusStopMarker.scss";
-import API from "../API";
+import { BusStop, BusStopTimeTable } from "../../../types";
+import "./style.scss";
+import API from "../../../API";
 
 type BusStopMarkerProps = {
   busStop: BusStop;
@@ -15,7 +15,7 @@ const regionColors: { [idx: number]: string } = {
   3: "#97ff28",
 };
 
-export function BusStopMarker({ busStop }: BusStopMarkerProps) {
+export default function BusStopMarker({ busStop }: BusStopMarkerProps) {
   const [busStopTimeTable, setBusStopTimeTable] =
     useState<BusStopTimeTable | null>(null);
   const [loading, setLoading] = useState<boolean>(false);

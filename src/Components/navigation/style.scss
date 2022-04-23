@@ -91,7 +91,7 @@
   right: 20px;
   width: 64px;
   height: 64px;
-  background: url("./topographic_toggle.png") calc(var(--is-non-topographic) * 64px) 0;
+  background: url("../../topographic_toggle.png") calc(var(--is-non-topographic) * 64px) 0;
   background-size: 128px 64px;
   transition: background-position 100ms linear;
   border-radius: 25%;
@@ -106,26 +106,4 @@
 }
 .non-topographic{
   --is-non-topographic: 1;
-}
-
-.current-pos-marker{
-  background: #0055ff;
-  border-radius: 50%;
-  width: 15px;
-  height: 15px;
-  border: 3px solid #ffffff;
-  box-sizing: border-box;
-  animation: current-pos-anim 1s ease infinite;
-}
-@keyframes current-pos-anim {
-  0% {
-    -webkit-box-shadow: 0 0 0 0 lighten(#0055ff, 30);
-    -moz-box-shadow: 0 0 0 0 lighten(#0055ff, 30);
-    box-shadow: 0 0 0 0 lighten(#0055ff, 30);
-  }
-  100%{
-    -webkit-box-shadow: 0 0 0 10px lighten(#0055ff, 30);
-    -moz-box-shadow: 0 0 0 10px lighten(#0055ff, 30);
-    box-shadow: 0 0 0 10px lighten(#0055ff, 30);
-  }
 }

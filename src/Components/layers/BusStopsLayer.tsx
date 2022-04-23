@@ -1,10 +1,10 @@
 import useSupercluster from "use-supercluster";
 import React, { useEffect, useState } from "react";
 import { useMapEvents, useMap } from "react-leaflet";
-import { BusStop } from "../types";
-import API from "../API";
-import { BusStopMarker } from "./BusStopMarker";
-import { ClusterMarker } from "./ClusterMarker";
+import { BusStop } from "../../types";
+import API from "../../API";
+import BusStopMarker from "../markers/BusStopMarker";
+import ClusterMarker from "../markers/ClusterMarker";
 
 export function BusStopLayer() {
   const [busStops, setBusStops] = useState<BusStop[]>([]);

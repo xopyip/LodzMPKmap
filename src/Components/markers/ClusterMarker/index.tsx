@@ -1,7 +1,7 @@
 import { Marker, Tooltip, useMap } from "react-leaflet";
 import React, { useMemo } from "react";
 import { DivIcon } from "leaflet";
-import "./ClusterMarker.scss";
+import "./style.scss";
 
 type ClusterMarkerProps = {
   count: number;
@@ -9,7 +9,7 @@ type ClusterMarkerProps = {
   lon: number;
 };
 
-export function ClusterMarker({ count, lat, lon }: ClusterMarkerProps) {
+export default function ClusterMarker({ count, lat, lon }: ClusterMarkerProps) {
   const icon = useMemo(
     () =>
       new DivIcon({

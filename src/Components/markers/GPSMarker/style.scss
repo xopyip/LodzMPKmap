@@ -1,0 +1,21 @@
+.gps-marker{
+  background: #0055ff;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  border: 3px solid #ffffff;
+  box-sizing: border-box;
+  animation: gps-anim 1s ease infinite;
+}
+@keyframes gps-anim {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 lighten(#0055ff, 30);
+    -moz-box-shadow: 0 0 0 0 lighten(#0055ff, 30);
+    box-shadow: 0 0 0 0 lighten(#0055ff, 30);
+  }
+  100%{
+    -webkit-box-shadow: 0 0 0 10px lighten(#0055ff, 30);
+    -moz-box-shadow: 0 0 0 10px lighten(#0055ff, 30);
+    box-shadow: 0 0 0 10px lighten(#0055ff, 30);
+  }
+}
