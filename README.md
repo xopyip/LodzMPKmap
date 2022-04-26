@@ -5,7 +5,7 @@
 Brak aplikacji w Apple Store umożliwiającej szybkie sprawdzenie lokalizacji autobusu danej linii. 
 
 ## Screenshoot:
-![Zrzut ekranu aplikacji](https://i.imgur.com/MtDAlkW.png)
+![Zrzut ekranu aplikacji](https://i.imgur.com/ulqt5RX.jpg)
 
 ## Stack
 - React - baza aplikacji
