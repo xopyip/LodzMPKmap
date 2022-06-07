@@ -1,6 +1,6 @@
 import { DivIcon } from "leaflet";
 import { Marker, Popup, Tooltip } from "react-leaflet";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./style.scss";
 import { Vehicle, VehicleTimeTable } from "../../../types";
 import API from "../../../API";
@@ -44,6 +44,7 @@ export default function VehicleMarker({
         : "--display-arrow: none;"
     }"></div>`,
   });
+  const [visibleStops, setVisibleStops] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
@@ -59,6 +60,12 @@ export default function VehicleMarker({
     };
   }, [vehicle.id, vehicle.lon1, vehicle.lat1, isSelected]);
 
+  useEffect(() => setVisibleStops(5), [isSelected]);
+
+  const showMoreStops = useCallback(() => {
+    setVisibleStops(visibleStops + 5);
+  }, [visibleStops]);
+
   return (
     <Marker
       icon={icon}
@@ -67,19 +74,27 @@ export default function VehicleMarker({
     >
       <Tooltip>{vehicle.name}</Tooltip>
       <Popup className="vehicle-popup">
-        <p>Linia: {vehicle.name}</p>
+        <div className="vehicle-popup-header">
+          <p>Linia: {vehicle.name}</p>
+          {vehicle.timeToNextStation < 0 && (
+            <p>Aktualne opóźnienie: {-vehicle.timeToNextStation}s</p>
+          )}
+        </div>
         <p>Kierunek: {vehicle.to}</p>
-        <p>Do nastepnego przystanku: {vehicle.timeToNextStation}s</p>
         {timeTable && <p>Do końca: {timeTable.stops.length} przystanków</p>}
         <ol className="vehicle-timetable">
           {timeTable &&
-            timeTable.stops.slice(0, 5).map(stop => (
+            timeTable.stops.slice(0, visibleStops).map(stop => (
               <li key={stop.stopID}>
                 {stop.stopName} {stop.timeStr.replace("&lt;", "<")}
               </li>
             ))}
         </ol>
-        {timeTable && timeTable.stops.length > 5 && <p>...</p>}
+        {timeTable && timeTable.stops.length > visibleStops && (
+          <button onClick={showMoreStops} type="button">
+            Pokaż więcej
+          </button>
+        )}
       </Popup>
     </Marker>
   );

@@ -25,3 +25,11 @@
     transform: skew(-20deg, -20deg);
   }
 }
+.vehicle-popup-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.leaflet-popup-content p{
+  margin: 0;
+}
