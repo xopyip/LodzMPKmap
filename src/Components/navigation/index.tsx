@@ -27,11 +27,13 @@ export default function Navigation({
           line => line.name.toLowerCase().indexOf(search.toLowerCase()) > -1,
         )
         .filter(line => {
-          const exp = /[^0-9]*([0-9]+)[^0-9]*/;
-          return (
-            (exp.exec(line.name) ?? ["", NaN])[1] ===
-            (exp.exec(search) ?? ["", NaN])[1]
-          ); // NaN because NaN === NaN returns false
+          const extractNumberPattern = /\D*(\d+)\D*/;
+          const lineNumberResult = extractNumberPattern.exec(line.name);
+          const searchNumberResult = extractNumberPattern.exec(search);
+          if (lineNumberResult === null || searchNumberResult === null) {
+            return false;
+          }
+          return lineNumberResult[1] === searchNumberResult[1];
         })
         .map(d => d.name)
         .join(",");
