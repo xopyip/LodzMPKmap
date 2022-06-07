@@ -5,7 +5,7 @@ import API from "../../API";
 import VehicleTrack from "../VehicleTrack";
 
 type VehiclesLayerProps = {
-  currentVehicles: string;
+  currentVehicles: string[];
   lines: Line[];
 };
 
@@ -19,10 +19,14 @@ export default function VehiclesLayer({
   );
 
   const loadVehicles = useCallback(
-    (r: string) => {
-      API.getVehicles(r).then((vehicles: Vehicle[]) => {
-        setVehicles(vehicles);
-      });
+    (r: string[]) => {
+      Promise.all(r.map(vehicle => API.getVehicles(vehicle))).then(
+        responses => {
+          setVehicles(
+            responses.reduce((prev, current) => [...prev, ...current], []),
+          );
+        },
+      );
     },
     [setVehicles],
   );

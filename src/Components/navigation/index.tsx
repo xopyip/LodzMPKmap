@@ -4,7 +4,7 @@ import { Line } from "../../types";
 import "./style.scss";
 
 type NavigationProps = {
-  setCurrentVehicles: (result: string) => void;
+  setCurrentVehicles: (result: string[]) => void;
   lines: Line[];
   isTopographic: boolean;
   setIsTopographic: (val: boolean) => void;
@@ -20,7 +20,7 @@ export default function Navigation({
   const alert = useAlert();
   const findVehicles = useCallback(
     (e: React.FormEvent) => {
-      setCurrentVehicles("");
+      setCurrentVehicles([]);
       e.preventDefault();
       const r = lines
         .filter(
@@ -35,8 +35,7 @@ export default function Navigation({
           }
           return lineNumberResult[1] === searchNumberResult[1];
         })
-        .map(d => d.name)
-        .join(",");
+        .map(d => d.name);
       if (r.length === 0) {
         alert.show("Podaj poprawny numer linii komunikacji miejskiej!");
         return false;

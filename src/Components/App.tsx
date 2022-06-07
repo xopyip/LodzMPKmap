@@ -12,7 +12,7 @@ import Navigation from "./navigation";
 
 function App() {
   const [lines, setLines] = useState<Line[]>([]);
-  const [currentVehicles, setCurrentVehicles] = useState("");
+  const [currentVehicles, setCurrentVehicles] = useState<string[]>([]);
   const [isTopographic, setIsTopographic] = useState(true);
 
   useEffect(() => {
