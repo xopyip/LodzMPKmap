@@ -13,10 +13,11 @@ export type VehicleTimeTable = {
 };
 
 export type Track = {
-  stops: { id: number; name: string; lon: number; lat: number };
+  stops: { id: number; name: string }[];
   roads: { id: number; from: number; to: number; points: [number, number][] }[];
   indices: { forward: number[]; backward: number[] }[];
   directions: {
+    id: number;
     name: string;
     to: string;
     from: string;

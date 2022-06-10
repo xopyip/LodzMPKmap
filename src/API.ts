@@ -68,14 +68,21 @@ const API = {
 
   async getTracks(track: number): Promise<Track> {
     return API.get(`Home/GetTracks?routeId=${track}`).then(data => {
-      const [stopId, stopName, , stopLon, stopLat] = data[0];
+      console.log(data);
+      const stops = data[0] as [
+        number,
+        string,
+        string,
+        number,
+        number,
+        number,
+      ][];
+
       return {
-        stops: {
-          id: stopId,
-          name: stopName,
-          lon: stopLon,
-          lat: stopLat,
-        },
+        stops: stops.map(el => ({
+          name: el[1],
+          id: el[0],
+        })),
         roads: data[1].map((d: (number | number[])[]) => {
           const [id, from, to, points] = d as [
             number,
@@ -98,7 +105,7 @@ const API = {
           backward: d[1],
         })),
         directions: data[3].map((d: (string | number[][])[]) => {
-          const [, , , name, from, to, indices] = d as [
+          const [id, , , name, from, to, indices] = d as [
             string,
             string,
             string,
@@ -108,6 +115,7 @@ const API = {
             number[][],
           ];
           return {
+            id,
             name: name.trim(),
             to: to.trim(),
             from: from.trim(),
@@ -141,6 +149,7 @@ const API = {
   async getBusStopDepartures(busStopId: number): Promise<BusStopTimeTable> {
     return API.get(`Home/GetTimetableReal?busStopId=${busStopId}`).then(
       (data: string) => {
+        console.log(data);
         return {
           departures: data
             .split("</R>")
@@ -187,6 +196,24 @@ const API = {
           line: scheduleInfo![2],
           stops,
         };
+      },
+    );
+  },
+
+  async getNextDepartures(
+    busStopId: number,
+  ): Promise<{ di: number; i: number; n: number }[]> {
+    return API.post(`Home/GetNextDepartues`, { busStopId }).then(
+      (data: string) => {
+        return data
+          .split("\n")
+          .map(l => /<D i="(\d+)" di="(\d+)" n="(\d+)" .* \/>/.exec(l))
+          .filter(stop => stop !== null)
+          .map(stop => ({
+            i: Number(stop![1]),
+            di: Number(stop![2]),
+            n: Number(stop![3]),
+          }));
       },
     );
   },

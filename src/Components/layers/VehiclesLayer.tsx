@@ -36,7 +36,7 @@ export default function VehiclesLayer({
     if (currentVehicles.length > 0) {
       id = setInterval(() => {
         loadVehicles(currentVehicles);
-      }, 1000);
+      }, 5000);
     }
     return () => id && clearInterval(id);
   }, [loadVehicles, currentVehicles]);
